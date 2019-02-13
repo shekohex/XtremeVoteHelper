@@ -11,11 +11,22 @@ namespace XtremeVoteHelper
     public class Controller
     {
         private readonly int servicePort;
+        private readonly string serviceIP = "127.0.0.1";
         /// <summary>
         /// Create New Controller.
         /// </summary>
-        /// <param name="servicePort">XtremeVote Server Port.</param>
-        public Controller(int servicePort) => this.servicePort = servicePort;
+        /// <param name="port">XtremeVote Server Port.</param>
+        public Controller(int port) => servicePort = port;
+        /// <summary>
+        /// Create a new Controller with IP
+        /// </summary>
+        /// <param name="ip">XtremeVote Server IP</param>
+        /// <param name="port">XtremeVote Server PORT</param>
+        public Controller(string ip, int port)
+        {
+            servicePort = port;
+            serviceIP = ip;
+        }
 
         /// <summary>
         /// Return the player vote points by it's username.
@@ -25,7 +36,7 @@ namespace XtremeVoteHelper
         /// <returns>Vote Points</returns>
         public async Task<int> GetPlayerPoints(string username)
         {
-            var url = $"http://127.0.0.1:{servicePort}/points?u={username}";
+            var url = $"http://{serviceIP}:{servicePort}/points?u={username}";
             try
             {
                 var result = await MakeHttpRequest(url, HttpMethod.Get);
@@ -47,7 +58,7 @@ namespace XtremeVoteHelper
         /// <returns>The Updated User Points</returns>
         public async Task<int> SetPlayerPoints(string username, int points)
         {
-            var url = $"http://127.0.0.1:{servicePort}/points?u={username}&p={points}";
+            var url = $"http://{serviceIP}:{servicePort}/points?u={username}&p={points}";
             try
             {
                 var result = await MakeHttpRequest(url, HttpMethod.Post);
